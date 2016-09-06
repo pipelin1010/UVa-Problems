@@ -1,0 +1,162 @@
+/* 
+ * File:   main.cpp
+ * Author: carlosfmr
+ *
+ * Created on 6 de septiembre de 2016, 02:44 PM
+ */
+
+#include <stdio.h>
+#include <vector>
+
+using namespace std;
+
+/*
+ * 
+ */
+
+int dataSets, coins, wgs, n, k;
+char x;
+
+vector <int> leftPan, rightPan;
+vector <bool> arr;
+
+bool left(){
+    for (int i = 0; i < k; i++){
+        if (arr[leftPan[i]-1]){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool right(){
+    for (int i = 0; i < k; i++){
+        if (arr[rightPan[i]-1]){
+            return true;
+        }
+    }
+    return false;
+}
+
+int unique(){
+    bool a = true;
+    int aux = 0;
+    for (int i = 0; i < arr.size(); i++){
+        if (!arr[i] && a){
+            a = false;
+            aux = i;
+        }
+        else if (!arr[i] && !a){
+            return 0;
+        }
+    }
+    
+    if (!a){
+        return aux;
+    }
+}
+
+int main(int argc, char** argv) {
+    //freopen("input","rt",stdin);
+    //freopen("output","w",stdout);
+    scanf("%i", & dataSets);
+    
+    while (dataSets--){
+        scanf("%i %i", &coins, &wgs);
+        arr.clear();
+        arr.resize(coins);
+ /*       
+        printf("BEGIN\n");
+        for (int i = 0; i < arr.size(); i++){
+            if (arr[i])
+                printf("true %i ", i + 1);
+            else
+                printf("false %i ", i + 1);
+        }
+        printf("\n");
+   */     
+        for (int i = 0; i < wgs; i++){
+            leftPan.clear(); rightPan.clear();
+            scanf("%i", &k);
+            
+            for (int i = 0; i < k; i++){
+                scanf("%i", &n);
+                leftPan.push_back(n);
+            }
+            
+            for (int i = 0; i < k; i++){
+                scanf("%i", &n);
+                rightPan.push_back(n);
+            }
+            
+            x = getchar();
+            
+            while (x == '\n'){
+                x = getchar();
+            }
+            
+            switch (x){
+                case '=':
+                    for (int i = 0; i < k; i++){
+                        arr[leftPan[i]-1] = true;
+                        arr[rightPan[i]-1] = true;
+                    }
+                    break;
+                case '>':
+                    /*if (left() and right()){
+                        break;
+                    }
+                    else if (left()){
+                        for (int i = 0; i < k; i++){
+                            arr[leftPan[i]-1] = true;
+                        }
+                    }
+                    else if (right()){
+                        for (int i = 0; i < k; i++){
+                            arr[rightPan[i]-1] = true;
+                        }
+                    }*/
+                    break;
+                case '<':
+                    /*if (left() && right()){
+                        break;
+                    }
+                    else if (left()){
+                        for (int i = 0; i < k; i++){
+                            arr[leftPan[i]-1] = true;
+                        }
+                    }
+                    else if (right()){
+                        for (int i = 0; i < k; i++){
+                            arr[rightPan[i]-1] = true;
+                        }
+                    }*/
+                    break;
+            }
+            /*
+            for (int i = 0; i < arr.size(); i++){
+                if (arr[i])
+                    printf("true %i ", i + 1);
+                else
+                    printf("false %i ", i + 1);
+            }
+            
+            printf("\n");
+            */
+        }
+        
+        if (unique()){
+           printf("%i\n", unique() + 1);  
+        }
+        else{
+            printf("0\n");
+        }
+        
+        if (dataSets != 0){
+            printf("\n");
+        }
+    }
+    
+    return 0;
+}
+
