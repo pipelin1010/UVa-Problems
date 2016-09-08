@@ -1,0 +1,45 @@
+/* 
+ * File:   main.cpp
+ * Author: carlosfmr
+ *
+ * Created on 7 de septiembre de 2016, 06:02 PM
+ */
+
+#include <stdio.h>
+#include <vector>
+#include <queue>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+/*
+ * 
+ */
+
+char lts[21];
+char id[3];
+vector <string> ltss;
+int n;
+
+int main(int argc, char** argv) {
+    freopen("input","rt",stdin);
+    freopen("output","w",stdout);
+    while (scanf("%i", &n), n){
+        queue<string> ids; ltss.clear();
+        string arr[n];
+        int aux = n;
+        while (aux--){
+            scanf("%s %s", id, lts);
+            ids.push(id); ltss.push_back(lts);
+        }
+        
+        while (!ids.empty()){
+            
+        }
+            
+    }
+    
+    return 0;
+}
+
