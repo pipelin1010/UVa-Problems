@@ -1,0 +1,56 @@
+/* 
+ * File:   main.cpp
+ * Author: carlosfmr
+ *
+ * Created on 9 de septiembre de 2016, 03:15 PM
+ */
+
+#include <stdio.h>
+#include <vector>
+ 
+using namespace std;
+ 
+int tc,n,k;
+bool a = false;
+vector <int> vls;
+ 
+int main(){
+    //freopen("input","rt",stdin);
+    //freopen("output","w",stdout);
+    while(scanf("%i", &tc), tc){
+        vls.clear(); 
+        a = false;
+        vls.resize(tc);
+        fill(vls.begin(),vls.end(),10001);
+ 
+	for (int i = 0; i < tc; i++){
+            scanf("%i %i", &n, &k);
+ 
+            if (a) continue;
+            
+            if (i+k < tc && i + k >= 0){
+                if (vls[i+k] == 10001){
+                    vls[i+k] = n;
+                }
+                else{
+                    a = true;
+                }
+            }
+            else
+                a = true;
+        }
+ 
+        if(a){
+            printf("-1");
+        }
+        else{
+            for (int i = 0; i < tc; i++){
+                printf("%i", vls[i]);
+                if (i+1 != tc) printf(" ");
+            }
+        }
+ 
+        printf("\n");
+    }
+    return 0;
+}
