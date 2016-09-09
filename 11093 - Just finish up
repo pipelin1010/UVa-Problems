@@ -1,0 +1,85 @@
+/* 
+ * File:   main.cpp
+ * Author: carlosfmr
+ *
+ * Created on 9 de septiembre de 2016, 04:05 PM
+ */
+
+#include <stdio.h>
+#include <vector>
+
+
+using namespace std;
+
+/*
+ * 
+ */
+
+int n, dt, c = 1, k;
+vector <int> gasto, incremento;
+
+int main(int argc, char** argv) {
+    //freopen("input","rt",stdin);
+    //freopen("output","w",stdout);
+    
+    scanf("%i", &dt);
+    
+    while(dt--){
+        gasto.clear(); incremento.clear();
+        scanf("%i", &n);
+        
+        for (int i = 0; i < n; i++){
+            scanf("%i", &k);
+            incremento.push_back(k);
+        }
+        
+        for (int i = 0; i < n; i++){
+            scanf("%i", &k);
+            gasto.push_back(k);
+        }
+        
+        int total = 0, aux = 0;
+        bool a = true;
+        for (int i = 0; i < n*2; i++){
+            //printf("1.INCREMENTO %i GASTO %i TOTAL %i I %i Aux %i\n", incremento[i%n], gasto[i%n], total,i,aux);
+            total += incremento[i%n] - gasto[i%n];
+            //printf("2.INCREMENTO %i GASTO %i TOTAL %i I %i Aux %i\n", incremento[i%n], gasto[i%n], total,i,aux);
+            //printf("N %i I-N %i AUX+1 %i\n", n, i-n, aux+1);
+            
+            if (i+1 == n*2) i++;
+            
+            if (i-n == aux+1){
+                //printf("ENTER\n");
+                break;
+            }
+            else if (i+1 > n*2){
+                //printf("ENTER OUT\n");
+                a = false;
+                break;
+            }
+            else if (total < 0){
+                if (incremento[i%n] - gasto[i%n] >= 0){
+                    aux = i;
+                    i--;
+                }
+                else{
+                    aux = i + 1;
+                }
+                total = 0;
+                
+            }
+            //printf("3.INCREMENTO %i GASTO %i TOTAL %i I %i Aux %i\n", incremento[i%n], gasto[i%n], total,i,aux);
+        }
+        
+        if (a){
+            printf("Case %i: Possible from station %i\n", c++ , aux+1);
+        }
+        else{
+            printf("Case %i: Not possible\n", c++);
+        }
+        
+    }
+    
+    return 0;
+}
+
