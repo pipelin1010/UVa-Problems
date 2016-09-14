@@ -1,0 +1,153 @@
+/* 
+ * File:   main.cpp
+ * Author: carlosfmr
+ *
+ * Created on 14 de septiembre de 2016, 05:07 PM
+ */
+
+#include <stdio.h>
+#include <string.h>
+
+using namespace std;
+
+/*
+ * 
+ */
+
+int n, m, p;
+char cmO[5], cmT[5];
+
+int main(int argc, char** argv) {
+    freopen("input","rt",stdin);
+    freopen("output","w",stdout);
+    scanf("%i", &n);
+    
+    int a[n][n];
+    
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            if (j == 0)
+                a[i][j] = i;
+            else{
+                a[i][j] = -1;
+            }
+        }
+    }
+    
+    while(scanf("%s", cmO), cmO[0] != 'q'){
+        scanf("%i %s %i", &m, cmT, &p);
+        int xm = 0, ym = 0;
+        int xp = 0, yp = 0;
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                if (a[i][j] == m){
+                    xm = i;
+                    ym = j;
+                }
+                else if (a[i][j] == p){
+                    xp = i;
+                    yp = j;
+                }
+                if (xp != 0 && yp != 0 && xm != 0 && ym != 0){
+                    i = n;
+                    break;
+                }
+            }
+        }
+        
+        if (m == p){
+            continue;
+        }
+        else if (xp == xm){
+            continue;
+        }
+        
+        if (cmO[0] == 'm'){
+            if (cmT[0] == 'o' && cmT[1] == 'n'){
+                for (int i = ym; a[xm][i] != -1; i++){
+                    a[a[xm][i]][0] = a[xm][i];
+                    a[xm][i] = -1;
+                }
+                
+                yp++;
+                
+                a[xp][yp] = m;
+                
+                yp++;
+                
+                for (int i = yp; a[xp][i] != -1; i++){
+                    a[a[xp][i]][0] = a[xp][i];
+                    a[xp][i] = 0;
+                }
+                
+                
+            }
+            else if (cmT[0] == 'o' && cmT[1] == 'v'){
+                for (int i = ym; a[xm][i] != -1; i++){
+                    a[a[xm][i]][0] = a[xm][i];
+                    a[xm][i] = -1;
+                }
+                
+                for (int i = yp; a[xp][i] != -1; i++){
+                    if (a[xp][i+1] == -1){
+                        a[xp][i+1] = m;
+                        break;
+                    }
+                }
+            }
+        }
+        else if (cmO[0] == 'p'){
+            if (cmT[0] == 'o' && cmT[1] == 'n'){
+                int aux = yp;
+                yp++;
+                
+                for (int i = yp; a[xp][i] != -1; i++){
+                    a[a[xp][i]][0] = a[xp][i];
+                    a[xp][i] = -1;
+                }
+                
+                aux++;
+                
+                for (int i = ym; a[xm][i] != -1; i++){
+                    a[xp][aux] = a[xm][i];
+                    a[xm][i] = -1;
+                    aux++;
+                }
+            }
+            else if (cmT[0] == 'o' && cmT[1] == 'v'){
+                int aux = yp;
+                
+                for (int i = yp; a[xp][i] != -1; i++){
+                    if (a[xp][i+1] == -1){
+                        aux = i + 1;
+                        break;
+                    }
+                }
+                
+                for (int i = ym; a[xm][i] != -1; i++){
+                    a[xp][aux] = a[xm][i];
+                    a[xm][i] = -1;
+                    aux++;
+                }
+            }
+        }
+    }
+    
+    for (int i = 0; i < n; i++){
+        printf("%i:", i);
+        for (int j =0 ; j < n; j++){
+            if (a[i][j] == -1){
+                printf("");
+            }
+            else{
+                if (j+1 != n){
+                    printf(" ");
+                }
+                printf("%i", a[i][j]);
+            }
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
