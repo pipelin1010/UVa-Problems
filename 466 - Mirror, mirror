@@ -12,6 +12,7 @@
  */
 
 #include <stdio.h>
+#include <vector>
 
 using namespace std;
 
@@ -19,40 +20,114 @@ using namespace std;
  * 
  */
 
-int n;
+int n, c = 1;
 char k;
+vector < vector <char> > a, b, d;
 
-int rotar(char &m[n][n]){
+
+void rotar(vector < vector <char> > & m){
+    vector < vector <char> > aux;
+    aux.resize(n);
+    for (int i = 0; i < n; i++){
+        aux[i].resize(n);
+    }
     
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            aux[i][j] = m[n-j-1][i];
+        }
+    }
+    
+    m = aux;
 }
 
-bool reflejado(char &m[n][n]){
-    
+bool iguales(vector < vector <char> > m, vector < vector <char> > p){
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            if(m[i][j] != p[i][j]){
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 int main(int argc, char** argv) {
     //freopen("input.txt","rt",stdin);
-    freopen("output.txt","w",stdout);
+    //freopen("output.txt","w",stdout);
     while (scanf("%i", &n) != EOF){
-        char a[n][n], b[n][n];
+        a.clear(); b.clear(); d.clear();
         
         k = getchar();
         
         for (int i = 0; i < n; i++){
+            vector <char> l;
             for (int j = 0; j < n; j++){
                 k = getchar();
-                a[i][j] = k;
+                l.push_back(k);
             }
+            a.push_back(l);
+            l.clear();
             k = getchar();
             for (int j = 0; j < n; j++){
                 k = getchar();
-                b[i][j] = k;
+                l.push_back(k);
             }
+            b.push_back(l);
             k = getchar();
         }
         
-        int estado = determinar(a,b);
+        d = a;
+        
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                char aux = d[i][j];
+                d[i][j] = a[n-i-1][j];
+                d[n-i-1][j] = a[i][j];
+            }
+        }
+        
+        int rotado = 0;
+        bool x = true;
+        
+        if (iguales(a,b)){
+            printf("Pattern %i was preserved.\n", c++);
+            x=false;
+        }
+        else{ 
+            while (rotado < 360){
+                rotado += 90;
+                rotar(a);
+                
+                if (iguales(a,b)){
+                    printf("Pattern %i was rotated %i degrees.\n", c++ , rotado);
+                    x = false;
+                    break;
+                }
+            }
+        }
+        
+        rotado = 0;
+        if (x){
+            if (iguales (d,b)){
+                printf("Pattern %i was reflected vertically.\n",c++);
+            }
+            else{
+                while (rotado < 360){
+                    rotado += 90;
+                    rotar(d);
+                
+                    if (iguales(d,b)){
+                        printf("Pattern %i was reflected vertically and rotated %i degrees.\n", c++ , rotado);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (rotado >= 360){
+            printf("Pattern %i was improperly transformed.\n", c++);
+        }
     }
     return 0;
 }
-
