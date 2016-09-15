@@ -1,0 +1,58 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: pipelin1010
+ *
+ * Created on 15 de septiembre de 2016, 12:32 PM
+ */
+
+#include <stdio.h>
+
+using namespace std;
+
+/*
+ * 
+ */
+
+int n;
+char k;
+
+int rotar(char &m[n][n]){
+    
+}
+
+bool reflejado(char &m[n][n]){
+    
+}
+
+int main(int argc, char** argv) {
+    //freopen("input.txt","rt",stdin);
+    freopen("output.txt","w",stdout);
+    while (scanf("%i", &n) != EOF){
+        char a[n][n], b[n][n];
+        
+        k = getchar();
+        
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                k = getchar();
+                a[i][j] = k;
+            }
+            k = getchar();
+            for (int j = 0; j < n; j++){
+                k = getchar();
+                b[i][j] = k;
+            }
+            k = getchar();
+        }
+        
+        int estado = determinar(a,b);
+    }
+    return 0;
+}
+
