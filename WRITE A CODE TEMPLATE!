@@ -1,0 +1,49 @@
+//WRITE A CODE TEMPLATE!
+
+/* 
+ * File:   main.cpp
+ * Author: carlosfmr
+ *
+ * Created on 19 de octubre de 2016, 05:25 PM
+ */
+
+#include <stdio.h>
+#include <vector>
+#include <string.h>
+#include <map>
+#include <utility>
+
+using namespace std;
+
+/*
+ * 
+ */
+
+int h,w;
+char id1[100], id2[100], id3[100];
+map<char,pair<int,int> > a;
+
+int main(int argc, char** argv) {
+    while (scanf("%i %i", &w, &h) != EOF){
+        a.clear();
+        char k;
+        
+        k = getchar();
+        
+        for (int i = 0; i < h; i++){
+            for (int j = 0; j < w; j++){
+                pair <int,int> b;
+                b = make_pair (i,j);
+                k = getchar();
+                a[k] = b;
+            }
+            k = getchar();
+        }
+        
+        k = getchar();
+        
+        
+    }
+    return 0;
+}
+
