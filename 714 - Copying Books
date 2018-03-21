@@ -1,0 +1,96 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: invitado
+ *
+ * Created on 21 de marzo de 2018, 05:06 PM
+ */
+
+#include <cstdlib>
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+using namespace std;
+typedef long long ll;
+
+int n, m, k, a[505], rW;
+ll hi, lo, mid;
+vector<int> b;
+
+bool can(ll x){
+    ll w, aux;
+    w = 1; aux = 0;
+    for(int i = 0; i < m; i++){
+        if(a[i] > x){
+            return false;
+        }
+        if(aux + a[i] > x){
+            aux = a[i];
+            w++;
+        }else{
+            aux += a[i];
+        }
+        
+        if(w > k){
+            return false;
+        }
+    }
+    return true;
+}
+
+int main(int argc, char** argv) {
+    scanf("%d", &n);
+    while(n--){
+        b.clear();
+        scanf("%d%d", &m, &k);
+        hi = 0;
+        for(int i = 0; i < m; i++){ scanf("%d", &a[i]); hi += a[i];}
+        
+        lo = a[0];
+        while(hi-lo > 1){
+            mid = lo + ( hi - lo )/2;
+            if(can(mid)){
+                hi = mid;
+            }else{
+                lo = mid;
+            }
+        }
+        mid = hi;
+        lo = a[m-1];
+        hi = m-1;
+        rW = k-1;
+        b.push_back(a[m-1]);
+        for(int i = m-2; i >= 0; i--){
+            if(hi <= rW && rW != 0){
+                b.push_back(0);
+                rW--;
+                i++;
+                lo = 0;
+                continue;
+            }
+            if(lo + a[i] > mid && rW != 0){
+                b.push_back(0);
+                rW--;
+                lo = 0;
+            }
+            b.push_back(a[i]);
+            lo += a[i];
+            hi--;
+        }
+        
+        reverse(b.begin(),b.end());
+        printf("%d", b[0]);
+        for(int i = 1; i < b.size(); i++){
+            if(b[i] == 0) printf(" /");
+            else printf(" %d", b[i]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
