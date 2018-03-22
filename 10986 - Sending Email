@@ -1,0 +1,64 @@
+//============================================================================
+// Name        : Sending.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <cstdio>
+#include <queue>
+#include <vector>
+#include <utility>
+#include <cstring>
+#define INF 1000000000
+using namespace std;
+typedef pair<int,int> ii;
+typedef vector<ii> vii;
+
+vector<vii> AdjList;
+int n, m, s, t, tc, u, v, w, c = 1;
+int dist[20005];
+bool f;
+
+int main(void) {
+	scanf("%d", &tc);
+	while(tc--){
+		scanf("%d%d%d%d", &n, &m, &s, &t);
+		for(int i = 0; i < n; i++) dist[i] = INF;
+		AdjList.assign(n,vii());
+		while(m--){
+			scanf("%d%d%d", &u, &v, &w);
+			AdjList[u].push_back(ii(w,v));
+			AdjList[v].push_back(ii(w,u));
+		}
+		priority_queue<ii, vii, greater<ii> > pq;
+		pq.push(ii(0,s));
+		dist[s] = 0;
+		f = false;
+		while(!pq.empty()){
+			w = pq.top().first;
+			u = pq.top().second;
+			pq.pop();
+			//printf("ESTOY EN NODO %d CON PESO %d\n", u, w);
+			if(u == t){
+				f = true;
+				break;
+			}
+			if(w > dist[u]) continue;
+
+			for(int i = 0; i < AdjList[u].size(); i++){
+				ii temp = AdjList[u][i];
+				//printf("VOY A REVISAR EL NODO %d CON PESO %d\n", temp.second, dist[temp.second]);
+				if(dist[u] + temp.first < dist[temp.second]){
+					dist[temp.second] = dist[u] + temp.first;
+					//printf("PUEDO PESO NUEVO %d\n", dist[temp.second]);
+					pq.push(ii(dist[temp.second],temp.second));
+				}
+			}
+		}
+		printf("Case #%d: ", c++);
+		f ? printf("%d\n", dist[t]) : printf("unreachable\n");
+	}
+	return 0;
+}
