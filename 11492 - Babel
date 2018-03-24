@@ -1,0 +1,102 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: invitado
+ *
+ * Created on 24 de marzo de 2018, 03:59 PM
+ */
+
+#include <cstdio>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <map>
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <queue>
+#define INF 1000000000
+using namespace std;
+typedef pair<string,int> si;
+typedef vector<si> vsi;
+
+int n, j, dist[2005], k, ans;
+string a, b, c, s, f;
+map<string,int> l, m;
+map<string,bool> v;
+vector<vsi> AdjList;
+
+struct Compare{
+    bool operator()(const si& A,const si& B) const{
+        if(A.first.size() != B.first.size()) return A.first.size() > B.first.size();
+        if(A.first != B.first) return A.first > B.first;
+        return A.second < B.second;
+    }
+};
+
+int main(int argc, char** argv) {
+    freopen("out.txt","w",stdout);
+    while(scanf("%d", &n), n){
+        l.clear();
+        m.clear();
+        v.clear();
+        for(int i = 0; i < n; i++) dist[i] = INF;
+        AdjList.assign(2,vsi());
+        ans = 0;
+        cin >> s >> f;
+        j = 0;
+        k = 0;
+        while(n--){
+            cin >> a >> b >> c;
+            if(l.find(a) == l.end()){
+                l[a] = j;
+                j++;
+                AdjList.push_back(vsi());
+            }
+            
+            if(l.find(b) == l.end()){
+                l[b] = j;
+                j++;
+                AdjList.push_back(vsi());
+            }
+            m[c] = k;
+            k++;
+            AdjList[l[a]].push_back(si(c,l[b]));
+            AdjList[l[b]].push_back(si(c,l[a]));
+        }
+        if(l.find(s) == l.end() || l.find(f) == l.end()){
+            printf("impossivel\n");
+            continue;
+        }
+        priority_queue <si, vector<si>, Compare> pq;
+        pq.push(si(string(),l[s]));
+        while(!pq.empty()){
+            int u = pq.top().second;
+            string w = pq.top().first;
+            if(u == l[f]){
+                ans = w.size();
+                break;
+            }
+            pq.pop();
+            //printf("ESTOY EN EL NODO %d CON PESO %s\n", u, w.c_str());
+            
+            for(int i = 0; i < AdjList[u].size(); i++){
+                si temp = AdjList[u][i];
+                //printf("VOY A PROBAR EL NODO %d CON PESO %s\n", temp.second, temp.first.c_str());
+                if(w[0] != temp.first[0] && !v[temp.first+w]){
+                    //printf("PUEDO\n");
+                    v[temp.first+w] = true;
+                    pq.push((si(temp.first + w, temp.second)));
+                }
+            }
+        }
+        printf("%d\n", ans);
+    }
+    return 0;
+}
+
