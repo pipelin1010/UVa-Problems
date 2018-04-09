@@ -1,0 +1,58 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: invitado
+ *
+ * Created on 9 de abril de 2018, 03:24 PM
+ */
+
+#include <cstdlib>
+#include <cstdio>
+#include <set>
+#include <iterator>
+using namespace std;
+
+int tc, n, m, g, j, actualIndex, c = 1;
+int a[30005];
+
+int main(int argc, char** argv) {
+    //freopen("inp","r",stdin);
+    //freopen("out","w",stdout);
+    scanf("%d", &tc);
+    multiset<int> s;
+    while(tc--){
+        if(c > 1) printf("\n");
+        c++;
+        s.clear();
+        scanf("%d%d", &n, &m);
+        for(int i = 0; i < n; i++) scanf("%d", &a[i]);
+        j = 0;
+        actualIndex = 0;
+        multiset<int>::iterator it = s.begin();
+        for(int i = 0; i < m; i++){
+            scanf("%d", &g);
+            
+            for( ; j < g; j++){
+                s.insert(a[j]);
+                if(a[j] < *it){
+                    it--;
+                }
+            }
+            
+            if(i == 0){
+                it = s.begin();
+            }else{
+                it++;
+            }
+            
+            printf("%d\n", *it);
+        }
+    }
+    return 0;
+}
+
