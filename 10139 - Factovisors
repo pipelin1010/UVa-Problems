@@ -1,0 +1,94 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: invitado
+ *
+ * Created on 13 de abril de 2018, 05:54 PM
+ */
+
+#include <cstdlib>
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+#include <bitset>
+#include <cstring>
+#include <map>
+using namespace std;
+typedef long long ll;
+typedef vector<int> vi;
+typedef map<int, int> mii;
+
+ll _sieve_size;
+bitset<10000010> bs;
+vi primes;
+
+void sieve(ll upperbound) {
+  _sieve_size = upperbound + 1;
+  bs.set();
+  bs[0] = bs[1] = 0;
+  for (ll i = 2; i <= _sieve_size; i++) if (bs[i]) {
+    for (ll j = i * i; j <= _sieve_size; j += i) bs[j] = 0;
+    primes.push_back((int)i);
+} }         
+
+int n, m, pf, i, j, f1[50000], f2[50000], aux, ans1, ans2;
+vi factors;
+bool p;
+
+int main(int argc, char** argv) {
+    sieve(50000);
+    while(scanf("%d%d", &m, &n) != EOF){
+        ans1 = n;
+        ans2 = m;
+        memset(f1,0,sizeof(f1));
+        memset(f2,0,sizeof(f2));
+        
+        factors.clear();
+        i = 0;
+        j = -1;
+        pf = primes[0];
+        while(n > 1 && pf * pf <= n){
+            if(n % pf == 0){
+                factors.push_back(pf);
+                j++;
+                while(n % pf == 0){
+                    n /= pf;
+                    f1[j]++;
+                }
+            }
+            pf = primes[++i];
+        }
+        if(n > 1){
+            factors.push_back(n);
+            f1[factors.size()-1]++;
+        }
+        i = 0;
+        p = true;
+        while(i < factors.size()){
+            aux = m;
+            pf = factors[i];
+            while(aux % pf == 0 && aux > 1){
+                aux /= pf;
+                f2[i]+=aux;
+            }
+            if(f1[i] > f2[i]){
+                p = false;
+                break;
+            }
+            i++;
+        }   
+        
+        if(p){
+            printf("%d divides %d!\n", ans1, ans2);
+        }else{
+            printf("%d does not divide %d!\n", ans1, ans2);
+        }
+    }
+    return 0;
+}
+
