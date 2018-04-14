@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         while(i < factors.size()){
             aux = m;
             pf = factors[i];
-            while(aux % pf == 0 && aux > 1){
+            while(aux >= pf){
                 aux /= pf;
                 f2[i]+=aux;
             }
@@ -91,4 +91,3 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
-
