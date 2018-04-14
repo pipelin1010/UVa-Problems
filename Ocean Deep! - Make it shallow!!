@@ -1,0 +1,52 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: invitado
+ *
+ * Created on 14 de abril de 2018, 05:28 PM
+ */
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+using namespace std;
+#define MOD 131071
+
+typedef long long ll;
+
+char x[105];
+ll sum;
+
+int main(int argc, char** argv) {
+    freopen("inp","r",stdin);
+    freopen("out","w",stdout);
+    sum = 0;
+    while(scanf("%s", x) != EOF){
+        for(int i = 0; x[i+1]; i++){
+            sum << 1;
+            sum %= MOD;
+            sum += (x[i]-'0');
+            sum %= MOD;
+        }
+        
+        if(x[strlen(x)-1] != '#'){
+            continue;
+        }
+        sum %= MOD;
+        printf("SUM %lld\n", sum);
+        if(sum == 0){
+            printf("YES\n");
+            sum = 0;
+        }else{
+            printf("NO\n");
+            sum = 0;
+        }
+    }
+    return 0;
+}
+
