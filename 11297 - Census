@@ -1,0 +1,123 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+#define INF 1000000000
+
+int a[505][505], n, q, x1, y1, x2, y2, v, ap, ma, mi;
+char k;
+
+struct SegTree{
+        int minVal;
+        int maxVal;
+        int start;
+        int end;
+        SegTree *left;
+        SegTree *right;
+        
+        SegTree(){
+            
+        }
+        
+        SegTree(int start,int end){
+            this->start = start;
+            this->end = end;
+            if(start == end){
+                this->minVal = a[ap][start];
+                this->maxVal = a[ap][start];
+                left =  NULL;
+                right = NULL;
+            }
+            else{
+                int mid = (start+end)/2;
+                left = new SegTree(start,mid);
+                right = new SegTree(mid + 1,end);
+                this->minVal = min(left->minVal,right->minVal); 
+                this->maxVal = max(left->maxVal,right->maxVal);
+            }
+        }
+        void set(int pos,int val){
+            if(start == end && start == pos){
+                this->minVal = val;
+                this->maxVal = val;
+                return;
+            }
+            
+            int mid = (start+end)/2;
+            
+            if( pos <= mid)
+                left->set(pos,val);
+            else
+                right->set(pos,val);
+           
+            this->minVal = min(left->minVal,right->minVal); 
+            this->maxVal = max(left->maxVal,right->maxVal);
+        }
+        int getMin(int start,int end){
+            if(this->start == start && this->end == end) return this->minVal;
+            int mid = (this->start+this->end)/2;
+            if(start <= mid && end <= mid) return left->getMin(start,end);
+            if(start > mid && end > mid) return right->getMin(start,end);
+            return min(left->getMin(start,mid),right->getMin(mid+1,end));
+        }
+        
+        int getMax(int start,int end){
+            if(this->start == start && this->end == end) return this->maxVal;
+            int mid = (this->start+this->end)/2;
+            if(start <= mid && end <= mid) return left->getMax(start,end);
+            if(start > mid && end > mid) return right->getMax(start,end);
+            return max(left->getMax(start,mid),right->getMax(mid+1,end));
+        }
+};
+
+int main() {
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            scanf("%d", &a[i][j]);
+        }
+    }
+    
+    SegTree tree[n];
+    
+    for(int i = 0; i < n; i++){
+        ap = i;
+        tree[i] = SegTree(0,n-1);
+    }
+    
+    scanf("%d", &q);
+    while(q--){
+        getchar();
+        k = getchar();
+        if(k == 'q'){
+            scanf("%d%d%d%d", &x1, &y1, &x2, &y2);
+            x1--; y1--; x2--; y2--;
+            ma = -INF;
+            mi = INF;
+            
+            /*for(int i = 0; i < n; i++){
+                for(int j = 0; j < n; j++){
+                    printf("%d ", a[i][j]);
+                }
+                printf("\n");
+            }*/
+            
+            for(int i = x1; i<=x2; i++){
+                //printf("TREE %d FROM %d TO %d\n", i, y1, y2);
+                mi = min(mi,tree[i].getMin(y1,y2));
+                ma = max(ma,tree[i].getMax(y1,y2));
+                //printf("MA %d MI %d\n", tree[i].getMin(y1,y2), tree[i].getMax(y1,y2));
+            }
+            
+            
+            printf("%d %d\n", ma, mi);
+            //printf("%c %d %d %d %d\n", k, x1+1, y1+1, x2+1, y2+1);
+        }else{
+            scanf("%d%d%d", &x1, &y1, &v);
+            x1--; y1--;
+            a[x1][y1] = v;
+            tree[x1].set(y1,v);
+            //printf("CHANGE %d %d\n", tree[x1].getMin(y1,y1), tree[x1].getMax(y1,y1));
+        }
+    }
+	return 0;
+}
