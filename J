@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <stack>
+#include <vector>
+#include <utility>
+#include <queue>
+using namespace std;
+#define INF 1000000000
+#define LIMIT 130
+typedef long long ll;
+typedef vector<int> vi;
+typedef pair<int,int> ii;
+typedef pair<ii,int> iii;
+typedef vector<ii> vii;
+typedef vector<iii> viii;
+
+int n, m;
+vector<vii> AdjList;
+vector<vi> tiempoEspera;
+vector<vi> minutoPartida;
+int u, v, t, c, f, s;
+
+bool mayorPareja(ii A, ii B){
+    if(A.first < B.first) return false;
+    if(A.first == B.first && A.second < B.second) return false;
+    return true;
+}
+
+int main() {
+    scanf("%d%d", &n, &m);
+    AdjList.assign(n,vector<iii>());
+    tiempoEspera.assign(n,vi());
+    minutoPartida.assign(n,vi());
+    for(int i = 0; i < m; i++){
+        scanf("%d%d%d%d%d%d", &u, &v, &t, &c, &f, &s);
+        u--; v--;
+        AdjList[u].push_back(iii(ii(t,c),v));
+        tiempoEspera[u].push_back(f);
+        minutoPartida[u].push_back(s);
+    }
+    
+    vii dist(n, INF); dist[0] = 0;
+    priority_queue < iii, vector<iii>, greater<iii> > pq; 
+    pq.push(iii(ii(0,0),0));
+    while(!pq.empty()){
+        iii front = pq.top();
+        pq.pop();
+        ii d = front.first;
+        u = front.second;
+        
+        if(mayorPareja(d,dist[u])) continue;
+        
+        for(int j = 0; j < AdjList[u].size(); j++){
+            iii w = AdjList[u][j];
+            ii x = w.first;
+            if(dist[u].first + x.first < dist[w.second].first){
+                dist[w.second] = ii(dist[u].first+x.first,dist[u].second+x.second);
+                pq.push(iii(dist[w.second],w.second));
+            }
+        }
+        
+        printf("%d %d\n", dist[n-1].first, dist[n-1].second);
+    }
+	return 0;
+}
