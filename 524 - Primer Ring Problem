@@ -1,0 +1,50 @@
+#include <iostream>
+#include <cstdio>
+#include <map>
+#include <vector>
+using namespace std;
+
+int n, c = 1, arr[20];
+map<int,bool> primes;
+
+void solve(int i, vector<bool> appear){
+    if(i == n){
+        if(primes[arr[i-1] + arr[0]]){
+            printf("%d", arr[0]);
+            for(int i = 1; i < n; i++){
+                printf(" %d", arr[i]);
+            }
+            printf("\n");
+        }
+        return;
+    }
+    for(int j = 2; j <= n; j++){
+        if(appear[j]) continue;
+        if(primes[arr[i-1]+j]){
+            appear[j] = true;
+            arr[i] = j;
+            solve(i+1,appear);
+            appear[j] = false;
+            arr[i] = -1;
+        }
+    }
+}
+
+int main() {
+    //2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31
+    primes.clear();
+    primes[2] = true; primes[3] = true; primes[5] = true;
+	primes[7] = true; primes[11] = true; primes[13] = true;
+	primes[17] = true; primes[19] = true; primes[23] = true;
+	primes[29] = true; primes[37] = true;
+	while(scanf("%d", &n) != EOF){
+	    if(c > 1) printf("\n");
+	    vector<bool> appear;
+	    appear.assign(n+1,0);
+	    appear[1] = true;
+	    arr[0] = 1;
+	    printf("Case %d:\n", c++);
+	    solve(1,appear);
+	}
+	return 0;
+}
